@@ -6,8 +6,12 @@ const ShoppingCart = ({
   cart,
   handleIncQunatity,
   handleDecQunatity,
-  total,
+  handleCartDel,
 }) => {
+  let calculTotal = () => {
+    let x = cart.map((el) => el.finalPrice).reduce((a, b) => a + b);
+    return x;
+  };
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -42,6 +46,7 @@ const ShoppingCart = ({
                 <th>Quantity</th>
                 <th>Unit Price</th>
                 <th>Final Price</th>
+                <th>DELETE</th>
               </tr>
               {cart.map((el) => (
                 <CartItem
@@ -49,11 +54,12 @@ const ShoppingCart = ({
                   handleDecQunatity={handleDecQunatity}
                   key={el.id}
                   el={el}
+                  handleCartDel={handleCartDel}
                 />
               ))}
               <tr>
                 <th>Total</th>
-                <th>{total} TND</th>
+                <th>{calculTotal()} TND</th>
               </tr>
             </Table>
           )}

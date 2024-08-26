@@ -1,7 +1,12 @@
 import React from "react";
 import AdminProductCard from "./AdminProductCard";
 
-const AdminProductList = ({ products }) => {
+const AdminProductList = ({
+  products,
+  search,
+  handleDelete,
+  handleEditProd,
+}) => {
   return (
     <div
       style={{
@@ -10,9 +15,18 @@ const AdminProductList = ({ products }) => {
         justifyContent: "space-evenly",
       }}
     >
-      {products.map((el) => (
-        <AdminProductCard key={el.id} el={el} />
-      ))}
+      {products
+        .filter((el) =>
+          el.name.toUpperCase().includes(search.trim().toUpperCase())
+        )
+        .map((el) => (
+          <AdminProductCard
+            key={el.id}
+            el={el}
+            handleDelete={handleDelete}
+            handleEditProd={handleEditProd}
+          />
+        ))}
     </div>
   );
 };

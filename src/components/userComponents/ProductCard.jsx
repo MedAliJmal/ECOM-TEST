@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Card, Carousel } from "react-bootstrap";
 
-const ProductCard = ({ el, handleAddCart }) => {
+const ProductCard = ({ el, handleAddCart, handleLike }) => {
   const [more, setMore] = useState(false);
 
   return (
@@ -36,11 +36,14 @@ const ProductCard = ({ el, handleAddCart }) => {
             Discount : {el.remise} %
           </Card.Text>
           <Card.Text style={{ color: "green", height: "35px" }}>
-            {el.price - (el.price * el.remise) / 100} TND
+            {el.finPrice} TND
           </Card.Text>
 
           <Button onClick={() => handleAddCart(el)} variant="primary">
             ADD TO CART
+          </Button>
+          <Button onClick={() => handleLike(el)} variant="outline-danger">
+            {el.likes} Like{" "}
           </Button>
         </Card.Body>
       </Card>

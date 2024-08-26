@@ -1,7 +1,12 @@
 import React from "react";
 import { Button, Carousel } from "react-bootstrap";
 
-const CartItem = ({ el, handleIncQunatity, handleDecQunatity }) => {
+const CartItem = ({
+  el,
+  handleIncQunatity,
+  handleDecQunatity,
+  handleCartDel,
+}) => {
   return (
     <tr>
       <td>
@@ -61,9 +66,12 @@ const CartItem = ({ el, handleIncQunatity, handleDecQunatity }) => {
           </Button>
         </div>
       </td>
-      <td>{el.price - (el.price * el.remise) / 100} TND</td>
-      <td className="finalPrice">
-        {(el.quantity * (el.price - (el.price * el.remise) / 100)).toFixed(2)}{" "}
+      <td>{el.finPrice} TND</td>
+      <td className="finalPrice">{(el.quantity * el.finPrice).toFixed(2)} </td>
+      <td>
+        <Button onClick={() => handleCartDel(el.id)} variant="danger">
+          Delete
+        </Button>
       </td>
     </tr>
   );

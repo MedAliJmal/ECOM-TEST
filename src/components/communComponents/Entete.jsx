@@ -14,8 +14,10 @@ const Entete = ({
   handleRole,
   cart,
   handleIncQunatity,
+  handleCartDel,
   handleDecQunatity,
-  total,
+  search,
+  handleSearch,
 }) => {
   return (
     <div>
@@ -60,15 +62,17 @@ const Entete = ({
                 placeholder="Search"
                 className="me-2"
                 aria-label="Search"
+                value={search}
+                onChange={(e) => handleSearch(e.target.value)}
               />
               <Button variant="outline-success">Search</Button>
             </Form>
             {user.role === "User" ? (
               <ShoppingCart
-                total={total}
                 cart={cart}
                 handleIncQunatity={handleIncQunatity}
                 handleDecQunatity={handleDecQunatity}
+                handleCartDel={handleCartDel}
               />
             ) : null}
 

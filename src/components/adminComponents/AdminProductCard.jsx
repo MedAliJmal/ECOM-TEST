@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Card, Carousel } from "react-bootstrap";
 import AdminEditProduct from "./AdminEditProduct";
 
-const AdminProductCard = ({ el }) => {
+const AdminProductCard = ({ el, handleDelete, handleEditProd }) => {
   const [more, setMore] = useState(false);
   return (
     <div>
@@ -37,11 +37,13 @@ const AdminProductCard = ({ el }) => {
               Discount : {el.remise} %
             </Card.Text>
             <Card.Text style={{ color: "green", height: "35px" }}>
-              {el.price - (el.price * el.remise) / 100} TND
+              {el.finPrice} TND
             </Card.Text>
 
-            <Button variant="danger">DELETE</Button>
-            <AdminEditProduct />
+            <Button variant="danger" onClick={() => handleDelete(el.id)}>
+              DELETE
+            </Button>
+            <AdminEditProduct el={el} handleEditProd={handleEditProd} />
           </Card.Body>
         </Card>
       </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import ProductCard from "./ProductCard";
 
-const ProductList = ({ products, handleAddCart }) => {
+const ProductList = ({ products, handleAddCart, search, handleLike }) => {
   return (
     <div
       style={{
@@ -10,9 +10,18 @@ const ProductList = ({ products, handleAddCart }) => {
         justifyContent: "space-evenly",
       }}
     >
-      {products.map((el) => (
-        <ProductCard handleAddCart={handleAddCart} key={el.id} el={el} />
-      ))}
+      {products
+        .filter((el) =>
+          el.name.toUpperCase().includes(search.trim().toUpperCase())
+        )
+        .map((el) => (
+          <ProductCard
+            handleAddCart={handleAddCart}
+            key={el.id}
+            el={el}
+            handleLike={handleLike}
+          />
+        ))}
     </div>
   );
 };

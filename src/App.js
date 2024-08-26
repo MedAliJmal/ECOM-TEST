@@ -19,53 +19,100 @@ function App() {
 
   const [products, setProducts] = useState(StaticProducts);
 
+  const handleDelete = (clickedID) => {
+    let cartVerif = cart.find((el) => el.id === clickedID);
+    if (cartVerif) {
+      setCart(cart.filter((el) => el.id !== clickedID));
+    }
+    setProducts(products.filter((el) => el.id !== clickedID));
+  };
+  const handleAddProduct = (newProduct) => {
+    setProducts([...products, newProduct]);
+  };
+  const handleEditProd = (editedProd) => {
+    setProducts(
+      products.map((el) => (el.id === editedProd.id ? editedProd : el))
+    );
+  };
+
+  const handleLike = (likedProd) => {
+    likedProd.likedbyMe
+      ? setProducts(
+          products.map((el) =>
+            el.id === likedProd.id
+              ? { ...el, likes: el.likes - 1, likedbyMe: false }
+              : el
+          )
+        )
+      : setProducts(
+          products.map((el) =>
+            el.id === likedProd.id
+              ? { ...el, likes: el.likes + 1, likedbyMe: true }
+              : el
+          )
+        );
+  };
   // --------------------------------------------
 
   //  SHOPPING CART STATE
 
   const [cart, setCart] = useState([]);
-  const [total, setTotal] = useState(0);
-
-  let finalPrices = document.querySelectorAll(".finalPrice");
-  console.log(finalPrices);
-  const sum = () => {
-    let totalx = 0;
-    for (let i = 0; i < finalPrices.length; i++) {
-      totalx += Number(finalPrices[i].innerHTML);
-    }
-    setTotal(totalx);
-  };
 
   const handleAddCart = (product) => {
     let verification = cart.find((el) => el.id === product.id);
     if (verification) {
       setCart(
         cart.map((el) =>
-          el.id === product.id ? { ...el, quantity: el.quantity + 1 } : el
+          el.id === product.id
+            ? {
+                ...el,
+                quantity: el.quantity + 1,
+                finalPrice: (el.quantity + 1) * el.finPrice,
+              }
+            : el
         )
       );
     } else {
-      setCart([...cart, { ...product, quantity: 1 }]);
+      setCart([
+        ...cart,
+        {
+          ...product,
+          quantity: 1,
+          finalPrice: product.finPrice,
+        },
+      ]);
     }
-
-    sum();
   };
   const handleIncQunatity = (clickedId) => {
     setCart(
       cart.map((el) =>
-        el.id === clickedId ? { ...el, quantity: el.quantity + 1 } : el
+        el.id === clickedId
+          ? {
+              ...el,
+              quantity: el.quantity + 1,
+              finalPrice: (el.quantity + 1) * el.finPrice,
+            }
+          : el
       )
     );
-    sum();
   };
 
   const handleDecQunatity = (clickedId) => {
     setCart(
       cart.map((el) =>
-        el.id === clickedId ? { ...el, quantity: el.quantity - 1 } : el
+        el.id === clickedId
+          ? {
+              ...el,
+              quantity: el.quantity - 1,
+              finalPrice: (el.quantity - 1) * el.finPrice,
+            }
+          : el
       )
     );
-    sum();
+  };
+
+  const handleCartDel = (clickedId) => {
+    setCart(cart.filter((el) => el.id !== clickedId));
   };
   // ------------------------------
 
@@ -73,25 +120,41 @@ function App() {
     setUser({ ...user, role: selectedRole });
   };
 
+  // search state
+
+  const [search, setSearch] = useState("");
+  const handleSearch = (text) => setSearch(text);
   return (
     <div className="App">
       <Entete
         handleIncQunatity={handleIncQunatity}
         handleDecQunatity={handleDecQunatity}
         cart={cart}
+        handleCartDel={handleCartDel}
         handleRole={handleRole}
         user={user}
-        total={total}
+        search={search}
+        handleSearch={handleSearch}
       />
       {/* Admin Section */}
       {user.role === "Admin" ? (
         <div>
-          <AdminProductList products={products} />
-          <AdminAddProduct />
+          <AdminProductList
+            handleDelete={handleDelete}
+            products={products}
+            search={search}
+            handleEditProd={handleEditProd}
+          />
+          <AdminAddProduct handleAddProduct={handleAddProduct} />
         </div>
       ) : user.role === "User" ? (
         <div>
-          <ProductList handleAddCart={handleAddCart} products={products} />
+          <ProductList
+            handleAddCart={handleAddCart}
+            products={products}
+            search={search}
+            handleLike={handleLike}
+          />
         </div>
       ) : null}
     </div>
